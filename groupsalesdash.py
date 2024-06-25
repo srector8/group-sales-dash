@@ -230,12 +230,12 @@ else:
     
         # Sidebar for cumulative graphs selection
         cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
-                                                 ['Cumulative Sales ($) by Rep', 
-                                                  'Cumulative Ticket Orders by Rep', 
-                                                  'Cumulative Tickets Sold by Rep',
+                                                 ['Cumulative Group Sales ($) by Rep', 
+                                                  'Cumulative Group Ticket Orders by Rep', 
+                                                  'Cumulative Group Tickets Sold by Rep',
                                                 'Sales Distribution by Rep for Each Game'])
     
-        if cumulative_option == 'Cumulative Sales ($) by Rep':
+        if cumulative_option == 'Cumulative Group Sales ($) by Rep':
             # Calculate cumulative sales by sales rep
             cumulative_sales_by_rep = data.groupby('acct_rep_full_name')['block_full_price'].sum().reset_index()
             cumulative_sales_by_rep = cumulative_sales_by_rep[cumulative_sales_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
@@ -254,7 +254,7 @@ else:
             # Display the chart
             st.altair_chart(bar_chart_sales, use_container_width=True)
     
-        elif cumulative_option == 'Cumulative Ticket Orders by Rep':
+        elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
             # Calculate cumulative ticket orders by sales rep
             cumulative_orders_by_rep = data.groupby('acct_rep_full_name').size().reset_index(name='total_orders')
             cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
@@ -273,7 +273,7 @@ else:
             # Display the chart
             st.altair_chart(bar_chart_orders, use_container_width=True)
     
-        elif cumulative_option == 'Cumulative Tickets Sold by Rep':
+        elif cumulative_option == 'Cumulative Group Tickets Sold by Rep':
             # Calculate cumulative tickets sold by sales rep
             cumulative_tickets_sold_by_rep = data.groupby('acct_rep_full_name')['num_seats'].sum().reset_index()
             cumulative_tickets_sold_by_rep = cumulative_tickets_sold_by_rep[cumulative_tickets_sold_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
