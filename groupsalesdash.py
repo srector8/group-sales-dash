@@ -87,20 +87,20 @@ else:
         # Prepare data for time-series plots
         # Total sales over time
         time_series_sales = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-        time_series_sales.columns = ['Date', 'Total Sales']  # Rename columns for Altair
+        time_series_sales.columns = ['Date', 'Total Sales']  
 
         # Total orders per day
         time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
-        time_series_orders.columns = ['Date', 'Total Orders']  # Rename columns for Altair
+        time_series_orders.columns = ['Date', 'Total Orders']  
 
         # Total tickets sold per day
         time_series_tickets = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
-        time_series_tickets.columns = ['Date', 'Total Tickets Sold']  # Rename columns for Altair
+        time_series_tickets.columns = ['Date', 'Total Tickets Sold']  
 
         # Time-series line chart using Altair for total sales
         chart_sales = alt.Chart(time_series_sales).mark_line().encode(
             x='Date:T',  # Rename x-axis
-            y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')),  # Rename y-axis and set title
+            y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')), 
             tooltip=['Date:T', 'Total Sales:Q']
         ).properties(
             title=f'Total Sales Over Time for Event: {event_name}',
@@ -111,7 +111,7 @@ else:
         # Time-series line chart using Altair for total orders
         chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
             x='Date:T',  # Rename x-axis
-            y=alt.Y('Total Orders:Q', axis=alt.Axis(title='Total Orders')),  # Rename y-axis and set title
+            y=alt.Y('Total Orders:Q', axis=alt.Axis(title='Total Orders')),  
             tooltip=['Date:T', 'Total Orders:Q']
         ).properties(
             title=f'Total Orders Over Time for Event: {event_name}',
@@ -122,7 +122,7 @@ else:
         # Time-series line chart using Altair for total tickets sold
         chart_tickets = alt.Chart(time_series_tickets).mark_line(color='green').encode(
             x='Date:T',  # Rename x-axis
-            y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  # Rename y-axis and set title
+            y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  
             tooltip=['Date:T', 'Total Tickets Sold:Q']
         ).properties(
             title=f'Total Tickets Sold Over Time for Event: {event_name}',
@@ -162,20 +162,20 @@ else:
             # Prepare data for sales rep performance charts
             # Total sales over time
             rep_time_series_sales = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-            rep_time_series_sales.columns = ['Date', 'Total Sales']  # Rename columns for Altair
+            rep_time_series_sales.columns = ['Date', 'Total Sales']  
 
             # Total orders per day
             rep_time_series_orders = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
-            rep_time_series_orders.columns = ['Date', 'Total Orders']  # Rename columns for Altair
+            rep_time_series_orders.columns = ['Date', 'Total Orders']  
 
             # Total tickets sold per day
             rep_time_series_tickets = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
-            rep_time_series_tickets.columns = ['Date', 'Total Tickets Sold']  # Rename columns for Altair
+            rep_time_series_tickets.columns = ['Date', 'Total Tickets Sold']  
 
             # Time-series line chart using Altair for sales rep total sales
             rep_chart_sales = alt.Chart(rep_time_series_sales).mark_line().encode(
                 x='Date:T',  # Rename x-axis
-                y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')),  # Rename y-axis and set title
+                y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')),  
                 tooltip=['Date:T', 'Total Sales:Q']
             ).properties(
                 title=f'Total Sales Over Time for {sales_rep}',
@@ -186,7 +186,7 @@ else:
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
                 x='Date:T',  # Rename x-axis
-                y=alt.Y('Total Orders:Q', axis=alt.Axis(title='Total Orders')),  # Rename y-axis and set title
+                y=alt.Y('Total Orders:Q', axis=alt.Axis(title='Total Orders')),  
                 tooltip=['Date:T', 'Total Orders:Q']
             ).properties(
                 title=f'Total Orders Over Time for {sales_rep}',
@@ -197,7 +197,7 @@ else:
             # Time-series line chart using Altair for sales rep total tickets sold
             rep_chart_tickets = alt.Chart(rep_time_series_tickets).mark_line(color='green').encode(
                 x='Date:T',  # Rename x-axis
-                y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  # Rename y-axis and set title
+                y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  
                 tooltip=['Date:T', 'Total Tickets Sold:Q']
             ).properties(
                 title=f'Total Tickets Sold Over Time for {sales_rep}',
