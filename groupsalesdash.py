@@ -47,9 +47,9 @@ else:
     data['event_name_display'] = data['event_name'].map(event_name_mapping).fillna(data['event_name'])
 
     # Page selection
-    page = st.sidebar.selectbox('Select Page', ['Group Sales Dashboard', 'Sales Rep Performance'])
+    page = st.sidebar.selectbox('Select Page', ['Sales by Game', 'Sales Rep Performance'])
 
-    if page == 'Group Sales Dashboard':
+    if page == 'Sales by Game':
         # Sidebar for event selection
         event_name = st.sidebar.selectbox('Select Event', sorted(data['event_name_display'].unique()))
 
