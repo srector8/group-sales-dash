@@ -306,7 +306,7 @@ else:
             bar_chart_sales_dist = alt.Chart(sales_distribution).mark_bar().encode(
                 x=alt.X('event_name_display:N', axis=alt.Axis(title='Game')),
                 y=alt.Y('sales_percentage:Q', stack='normalize', axis=alt.Axis(format='%'), title='Sales Percentage'),
-                color='acct_rep_full_name:N',
+                color=alt.Color('acct_rep_full_name:N', legend=alt.Legend(title='Account Rep')),
                 tooltip=['event_name_display:N', 'acct_rep_full_name:N', 'block_full_price:Q', 'sales_percentage:Q']
             ).properties(
                 width=800,
