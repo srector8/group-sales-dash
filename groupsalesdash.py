@@ -14,29 +14,43 @@ import altair as alt
 # Set the title of the Streamlit page
 st.set_page_config(page_title="Group Sales Dashboard")
 
-# Load your data
-@st.cache_data
-def load_data(file_path, encoding):
+# Load your data and convert to UTF-8
+@st.cache(allow_output_mutation=True)
+def load_data(file_path):
     try:
-        df = pd.read_csv(file_path, encoding=encoding)
+        # Read CSV with Latin-1 encoding
+        df = pd.read_csv(file_path, encoding='latin1')
     except UnicodeDecodeError as e:
         st.error(f"Error reading the file: {e}")
         return None
     
-    df['add_datetime'] = pd.to_datetime(df['add_datetime'])
+    # Convert add_datetime column to datetime if necessary
+    if 'add_datetime' in df.columns:
+        df['add_datetime'] = pd.to_datetime(df['add_datetime'])
+    
+    # Return the DataFrame
     return df
 
 # Specify your CSV file path
 data_file = 'group_sales.csv'
 
-# Try different encodings based on your knowledge or inspection
-encodings_to_try = ['utf-8', 'latin1', 'iso-8859-1', 'utf-16']
+# Load data and convert to UTF-8
+data = load_data(data_file)
 
-data = None
-for encoding in encodings_to_try:
-    data = load_data(data_file, encoding)
-    if data is not None:
-        break
+if data is None:
+    st.error("Failed to load data. Please check the file and try again.")
+else:
+    # Write DataFrame to a new UTF-8 encoded CSV file in Streamlit's cache directory
+    st.write("Data has been successfully loaded.")
+    st.write(data.head())  # Display first few rows of the loaded data
+
+    # Save DataFrame to UTF-8 encoded CSV in Streamlit's cache directory
+    st.write("Saving data to UTF-8 encoded CSV...")
+    try:
+        data.to_csv('group_sales_utf8.csv', index=False, encoding='utf-8')
+        st.success("Data successfully saved to group_sales_utf8.csv")
+    except Exception as e:
+        st.error(f"Error saving data: {e}")
 
 if data is None:
     st.error("Failed to load data. Please check the file encoding and try again.")
