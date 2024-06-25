@@ -108,18 +108,16 @@ else:
 
         # Display the charts with appropriate labels
         st.altair_chart(chart_sales, use_container_width=True)
-        st.altair_chart(chart_orders, use_container_width=True)
-        st.altair_chart(chart_tickets, use_container_width=True)
-
-        # Print statements for total metrics
         if not time_series_sales.empty:
             total_sales = time_series_sales['Total Sales'].sum()
             st.info(f"{event_name} has reached ${total_sales:.2f} in total sales over all time.")
-
+            
+        st.altair_chart(chart_orders, use_container_width=True)
         if not time_series_orders.empty:
             total_orders = time_series_orders['total_orders'].sum()
             st.info(f"{event_name} has accumulated {total_orders} total orders over all time.")
-
+            
+        st.altair_chart(chart_tickets, use_container_width=True)
         if not time_series_tickets.empty:
             total_tickets = time_series_tickets['Total Tickets Sold'].sum()
             st.info(f"{event_name} has sold {total_tickets} total tickets over all time.")
@@ -187,18 +185,14 @@ else:
             st.altair_chart(rep_chart_sales, use_container_width=True)
             if not rep_time_series_sales.empty:
                 total_rep_sales = rep_time_series_sales['Total Sales'].sum()
-                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total sales over all time.")
+                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total sales over this time.")
             
             st.altair_chart(rep_chart_orders, use_container_width=True)
-            st.altair_chart(rep_chart_tickets, use_container_width=True)
-
-            # Print statements for total metrics
-           
-
             if not rep_time_series_orders.empty:
                 total_rep_orders = rep_time_series_orders['Total Orders'].sum()
-                st.info(f"{sales_rep} has accumulated {total_rep_orders} total orders over all time.")
-
+                st.info(f"{sales_rep} has accumulated {total_rep_orders} total orders over this time.")
+                
+            st.altair_chart(rep_chart_tickets, use_container_width=True)
             if not rep_time_series_tickets.empty:
                 total_rep_tickets = rep_time_series_tickets['Total Tickets Sold'].sum()
-                st.info(f"{sales_rep} has sold {total_rep_tickets} total tickets over all time.")
+                st.info(f"{sales_rep} has sold {total_rep_tickets} total tickets over this time.")
