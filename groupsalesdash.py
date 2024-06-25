@@ -23,8 +23,7 @@ def load_data(file_path, encoding='utf-8'):
     df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     return df
 
-# Specify your CSV file path
-data_file = 'your_data.csv'
+data_file = 'group_sales.csv'
 
 # Specify the encoding (adjust as needed)
 encoding = 'utf-8'
