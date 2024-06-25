@@ -78,7 +78,7 @@ else:
     data['event_name_display'] = data['event_name'].map(event_name_mapping).fillna(data['event_name'])
 
     # Page selection
-    page = st.sidebar.selectbox('Select Page', ['Sales by Game', 'Sales Rep Performance', 'Cumulative Stats for Reps'])
+    page = st.sidebar.selectbox('Select Page', ['Sales by Game', 'Sales Rep Performance', 'Cumulative Stats for Games', 'Cumulative Stats for Reps'])
 
     if page == 'Sales by Game':
         # Sidebar for event selection
@@ -224,6 +224,71 @@ else:
                 total_rep_tickets = rep_time_series_tickets['Total Tickets Sold'].sum()
                 st.info(f"{sales_rep} has sold {total_rep_tickets} total group tickets over this time.")
 
+    elif page == 'Cumulative Stats for Games':
+            # Sidebar for cumulative graphs selection
+            game_cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
+                                                          ['Cumulative Group Sales ($) for Each Game', 
+                                                           'Cumulative Group Orders for Each Game', 
+                                                           'Cumulative Group Tickets for Each Game'])
+            
+            # Sort events by their display name using the mapping order
+            sorted_events = [event_name_mapping[key] for key in event_name_mapping.keys() if key in data['event_name'].unique()]
+            
+            if game_cumulative_option == 'Cumulative Group Sales ($) for Each Game':
+                # Calculate cumulative sales by game
+                cumulative_sales_by_game = data.groupby('event_name_display')['block_full_price'].sum().reset_index()
+                cumulative_sales_by_game = cumulative_sales_by_game.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
+            
+                # Bar chart for cumulative sales by game
+                bar_chart_game_sales = alt.Chart(cumulative_sales_by_game).mark_bar().encode(
+                    x=alt.X('event_name_display', sort=sorted_events, axis=alt.Axis(title='Game')),
+                    y=alt.Y('block_full_price', axis=alt.Axis(title='Cumulative Group Sales ($)')),
+                    tooltip=['event_name_display', 'block_full_price']
+                ).properties(
+                    width=800,
+                    height=400
+                )
+            
+                # Display the chart
+                st.altair_chart(bar_chart_game_sales, use_container_width=True)
+            
+            elif game_cumulative_option == 'Cumulative Group Orders for Each Game':
+                # Calculate cumulative orders by game
+                cumulative_orders_by_game = data.groupby('event_name_display').size().reset_index(name='total_orders')
+                cumulative_orders_by_game = cumulative_orders_by_game.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
+            
+                # Bar chart for cumulative orders by game
+                bar_chart_game_orders = alt.Chart(cumulative_orders_by_game).mark_bar().encode(
+                    x=alt.X('event_name_display', sort=sorted_events, axis=alt.Axis(title='Game')),
+                    y=alt.Y('total_orders', axis=alt.Axis(title='Cumulative Group Orders')),
+                    tooltip=['event_name_display', 'total_orders']
+                ).properties(
+                    width=800,
+                    height=400
+                )
+            
+                # Display the chart
+                st.altair_chart(bar_chart_game_orders, use_container_width=True)
+            
+            elif game_cumulative_option == 'Cumulative Group Tickets for Each Game':
+                # Calculate cumulative tickets sold by game
+                cumulative_tickets_by_game = data.groupby('event_name_display')['num_seats'].sum().reset_index()
+                cumulative_tickets_by_game = cumulative_tickets_by_game.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
+            
+                # Bar chart for cumulative tickets sold by game
+                bar_chart_game_tickets = alt.Chart(cumulative_tickets_by_game).mark_bar().encode(
+                    x=alt.X('event_name_display', sort=sorted_events, axis=alt.Axis(title='Game')),
+                    y=alt.Y('num_seats', axis=alt.Axis(title='Cumulative Group Tickets')),
+                    tooltip=['event_name_display', 'num_seats']
+                ).properties(
+                    width=800,
+                    height=400
+                )
+            
+                # Display the chart
+                st.altair_chart(bar_chart_game_tickets, use_container_width=True)
+
+    
     elif page == 'Cumulative Stats for Reps':
         # Filter representatives with at least 30 orders
         reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
