@@ -192,3 +192,92 @@ else:
             rep_chart_tickets = alt.Chart(rep_time_series_tickets).mark_line(color='green').encode(
                 x='Date:T',  # Rename x-axis
                 y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  # Rename y-axis and set title
+                tooltip=['Date:T', 'Total Tickets Sold:Q']
+            ).properties(
+                title=f'Total Tickets Sold Over Time for {sales_rep}',
+                width=800,
+                height=300
+            )
+
+            # Display the charts with appropriate labels
+            st.altair_chart(rep_chart_sales, use_container_width=True)
+            if not rep_time_series_sales.empty:
+                total_rep_sales = rep_time_series_sales['Total Sales'].sum()
+                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total group sales over this time.")
+            
+            st.altair_chart(rep_chart_orders, use_container_width=True)
+            if not rep_time_series_orders.empty:
+                total_rep_orders = rep_time_series_orders['Total Orders'].sum()
+                st.info(f"{sales_rep} has accumulated {total_rep_orders} total group orders over this time.")
+                
+            st.altair_chart(rep_chart_tickets, use_container_width=True)
+            if not rep_time_series_tickets.empty:
+                total_rep_tickets = rep_time_series_tickets['Total Tickets Sold'].sum()
+                st.info(f"{sales_rep} has sold {total_rep_tickets} total group tickets over this time.")
+
+    elif page == 'Cumulative Stats for Reps':
+        # Filter representatives with at least 30 orders
+        reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
+    
+        # Sidebar for cumulative graphs selection
+        cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
+                                                 ['Cumulative Sales ($) by Rep', 
+                                                  'Cumulative Ticket Orders by Rep', 
+                                                  'Cumulative Tickets Sold by Rep'])
+    
+        if cumulative_option == 'Cumulative Sales ($) by Rep':
+            # Calculate cumulative sales by sales rep
+            cumulative_sales_by_rep = data.groupby('acct_rep_full_name')['block_full_price'].sum().reset_index()
+            cumulative_sales_by_rep = cumulative_sales_by_rep[cumulative_sales_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
+            cumulative_sales_by_rep = cumulative_sales_by_rep.sort_values(by='block_full_price', ascending=False)
+    
+            # Bar chart for cumulative sales by rep
+            bar_chart_sales = alt.Chart(cumulative_sales_by_rep).mark_bar().encode(
+                x=alt.X('acct_rep_full_name', sort='-y', axis=alt.Axis(title='Sales Representative')),
+                y=alt.Y('block_full_price', axis=alt.Axis(title='Cumulative Sales ($)')),
+                tooltip=['acct_rep_full_name', 'block_full_price']
+            ).properties(
+                width=800,
+                height=400
+            )
+    
+            # Display the chart
+            st.altair_chart(bar_chart_sales, use_container_width=True)
+    
+        elif cumulative_option == 'Cumulative Ticket Orders by Rep':
+            # Calculate cumulative ticket orders by sales rep
+            cumulative_orders_by_rep = data.groupby('acct_rep_full_name').size().reset_index(name='total_orders')
+            cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
+            cumulative_orders_by_rep = cumulative_orders_by_rep.sort_values(by='total_orders', ascending=False)
+    
+            # Bar chart for cumulative ticket orders by rep
+            bar_chart_orders = alt.Chart(cumulative_orders_by_rep).mark_bar().encode(
+                x=alt.X('acct_rep_full_name', sort='-y', axis=alt.Axis(title='Sales Representative')),
+                y=alt.Y('total_orders', axis=alt.Axis(title='Cumulative Ticket Orders')),
+                tooltip=['acct_rep_full_name', 'total_orders']
+            ).properties(
+                width=800,
+                height=400
+            )
+    
+            # Display the chart
+            st.altair_chart(bar_chart_orders, use_container_width=True)
+    
+        elif cumulative_option == 'Cumulative Tickets Sold by Rep':
+            # Calculate cumulative tickets sold by sales rep
+            cumulative_tickets_sold_by_rep = data.groupby('acct_rep_full_name')['num_seats'].sum().reset_index()
+            cumulative_tickets_sold_by_rep = cumulative_tickets_sold_by_rep[cumulative_tickets_sold_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
+            cumulative_tickets_sold_by_rep = cumulative_tickets_sold_by_rep.sort_values(by='num_seats', ascending=False)
+    
+            # Bar chart for cumulative tickets sold by rep
+            bar_chart_tickets = alt.Chart(cumulative_tickets_sold_by_rep).mark_bar().encode(
+                x=alt.X('acct_rep_full_name', sort='-y', axis=alt.Axis(title='Sales Representative')),
+                y=alt.Y('num_seats', axis=alt.Axis(title='Cumulative Tickets Sold')),
+                tooltip=['acct_rep_full_name', 'num_seats']
+            ).properties(
+                width=800,
+                height=400
+            )
+    
+            # Display the chart
+            st.altair_chart(bar_chart_tickets, use_container_width=True)
