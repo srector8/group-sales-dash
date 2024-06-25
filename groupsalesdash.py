@@ -10,6 +10,14 @@ Original file is located at
 import streamlit as st
 import pandas as pd
 import altair as alt
+import chardet
+
+# Function to detect file encoding
+def detect_encoding(file_path):
+    with open(file_path, 'rb') as file:
+        raw_data = file.read(10000)  # Read the first 10,000 bytes
+    result = chardet.detect(raw_data)
+    return result['encoding']
 
 # Load your data
 @st.cache_data
@@ -23,6 +31,7 @@ def load_data(file_path, encoding):
     df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     return df
 
+# Specify your CSV file path
 data_file = 'group_sales.csv'
 
 # Try different encodings based on your knowledge or inspection
@@ -43,20 +52,51 @@ else:
     # Filter data based on selected event
     filtered_data = data[data['event_name'] == event_name]
 
-    # Prepare data for time-series plot
-    time_series_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-    time_series_data.columns = ['date', 'total_sales']
+    # Prepare data for time-series plots
+    # Total sales per day
+    sales_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
+    sales_data.columns = ['date', 'total_sales']
 
-    # Time-series line chart using Altair
-    chart = alt.Chart(time_series_data).mark_line().encode(
+    # Total orders per day (counting rows)
+    orders_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
+    orders_data.columns = ['date', 'total_orders']
+
+    # Total tickets sold per day (sum of num_seats)
+    tickets_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
+    tickets_data.columns = ['date', 'total_tickets_sold']
+
+    # Time-series line charts using Altair
+    chart_sales = alt.Chart(sales_data).mark_line().encode(
         x='date:T',
         y='total_sales:Q',
         tooltip=['date:T', 'total_sales:Q']
     ).properties(
         title=f'Total Sales Over Time for Event: {event_name}',
         width=800,
-        height=400
+        height=300
     )
 
-    # Display the chart
-    st.altair_chart(chart, use_container_width=True)
+    chart_orders = alt.Chart(orders_data).mark_line().encode(
+        x='date:T',
+        y='total_orders:Q',
+        tooltip=['date:T', 'total_orders:Q']
+    ).properties(
+        title=f'Total Orders Over Time for Event: {event_name}',
+        width=800,
+        height=300
+    )
+
+    chart_tickets = alt.Chart(tickets_data).mark_line().encode(
+        x='date:T',
+        y='total_tickets_sold:Q',
+        tooltip=['date:T', 'total_tickets_sold:Q']
+    ).properties(
+        title=f'Total Tickets Sold Over Time for Event: {event_name}',
+        width=800,
+        height=300
+    )
+
+    # Display the charts
+    st.altair_chart(chart_sales, use_container_width=True)
+    st.altair_chart(chart_orders, use_container_width=True)
+    st.altair_chart(chart_tickets, use_container_width=True)
