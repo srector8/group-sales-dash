@@ -214,7 +214,7 @@ else:
             if not rep_time_series_tickets.empty:
                 total_rep_tickets = rep_time_series_tickets['Total Tickets Sold'].sum()
                 st.info(f"{sales_rep} has sold {total_rep_tickets} total group tickets over this time.")
-       elif page == 'Cumulative Stats for Reps':
+     elif page == 'Cumulative Stats for Reps':
         # Filter representatives with at least 30 orders
         reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
     
