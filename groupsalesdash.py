@@ -11,10 +11,8 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
-# Set the title of the Streamlit page
 st.set_page_config(page_title="Group Sales Dashboard")
 
-# Load your data and convert to UTF-8
 @st.cache(allow_output_mutation=True)
 def load_data(file_path):
     try:
@@ -24,11 +22,9 @@ def load_data(file_path):
         st.error(f"Error reading the file: {e}")
         return None
     
-    # Convert add_datetime column to datetime if necessary
     if 'add_datetime' in df.columns:
         df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     
-    # Return the DataFrame
     return df
 
 # Specify your CSV file path
