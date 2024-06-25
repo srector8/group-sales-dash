@@ -12,6 +12,7 @@ import pandas as pd
 import altair as alt
 
 st.set_page_config(page_title="Group Sales Dashboard")
+st.sidebar.title("Group Sales Dashboard")
 
 @st.cache(allow_output_mutation=True)
 def load_data(file_path):
