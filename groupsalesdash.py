@@ -83,8 +83,8 @@ else:
 
     # Time-series line chart using Altair for total sales
     chart_sales = alt.Chart(time_series_sales).mark_line().encode(
-        x='Date:T',  # Rename x-axis
-        y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')),  # Rename y-axis and set title
+        x='Date:T',  
+        y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')),  
         tooltip=['Date:T', 'Total Sales:Q']
     ).properties(
         title=f'Total Sales Over Time for Event: {event_name}',
