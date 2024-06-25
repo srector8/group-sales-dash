@@ -40,15 +40,10 @@ data = load_data(data_file)
 if data is None:
     st.error("Failed to load data. Please check the file and try again.")
 else:
-    # Write DataFrame to a new UTF-8 encoded CSV file in Streamlit's cache directory
     st.write("Data has been successfully loaded.")
-    st.write(data.head())  # Display first few rows of the loaded data
 
-    # Save DataFrame to UTF-8 encoded CSV in Streamlit's cache directory
-    st.write("Saving data to UTF-8 encoded CSV...")
     try:
         data.to_csv('group_sales_utf8.csv', index=False, encoding='utf-8')
-        st.success("Data successfully saved to group_sales_utf8.csv")
     except Exception as e:
         st.error(f"Error saving data: {e}")
 
