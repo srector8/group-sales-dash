@@ -291,21 +291,19 @@ else:
     
             # Display the chart
             st.altair_chart(bar_chart_tickets, use_container_width=True)
-        elif cumulative_option == 'Sales Distribution by Rep for Each Game':
+       elif cumulative_option == 'Sales Distribution by Rep for Each Game':
             # Prepare data for sales distribution by rep for each game
             sales_distribution = data.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
         
             # Calculate percentage of sales for each rep for each game
-
-            sales_distribution['sales_percentage'] = sales_distribution.groupby('event_name_display')['block_full_price'].apply(lambda x: (x / x.sum() * 100) if x.sum() != 0 else 0)
-
+            sales_distribution['sales_percentage'] = sales_distribution.groupby('event_name_display')['block_full_price'].transform(lambda x: (x / x.sum()) * 100)
         
             # Bar chart for sales distribution by rep for each game
             bar_chart_sales_dist = alt.Chart(sales_distribution).mark_bar().encode(
-                x=alt.X('event_name_display', axis=alt.Axis(title='Game')),
+                x=alt.X('event_name_display:N', axis=alt.Axis(title='Game')),
                 y=alt.Y('sales_percentage:Q', stack='normalize', axis=alt.Axis(format='%'), title='Sales Percentage'),
                 color='acct_rep_full_name:N',
-                tooltip=['event_name_display', 'acct_rep_full_name', 'block_full_price', 'sales_percentage']
+                tooltip=['event_name_display:N', 'acct_rep_full_name:N', 'block_full_price:Q', 'sales_percentage:Q']
             ).properties(
                 width=800,
                 height=400,
