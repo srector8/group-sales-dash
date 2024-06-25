@@ -322,7 +322,7 @@ else:
             
             # Create a DataFrame for the table
             top_salesman_table = top_salesman_per_game[['event_name_display', 'acct_rep_full_name']]
-            top_salesman_table.columns = ['Game', 'Top Salesman']
+            top_salesman_table.columns = ['Game', 'Top Rep']
             
             # Display the table
             st.table(top_salesman_table)
