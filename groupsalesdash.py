@@ -87,7 +87,7 @@ else:
         # Prepare data for time-series plots
         # Total sales over time
         time_series_sales = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-        time_series_sales.columns = ['Date', 'Total Sales ($)']  
+        time_series_sales.columns = ['Date', 'Total Sales']  
 
         # Total orders per day
         time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
