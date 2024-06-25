@@ -292,8 +292,12 @@ else:
             # Display the chart
             st.altair_chart(bar_chart_tickets, use_container_width=True)
         elif cumulative_option == 'Sales Distribution by Rep for Each Game':
+            # Filter out representatives with fewer than 30 orders
+            reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
+        
             # Prepare data for sales distribution by rep for each game
-            sales_distribution = data.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
+            sales_distribution = data[data['acct_rep_full_name'].isin(reps_with_enough_orders)]
+            sales_distribution = sales_distribution.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
         
             # Calculate percentage of sales for each rep for each game
             sales_distribution['sales_percentage'] = sales_distribution.groupby('event_name_display')['block_full_price'].transform(lambda x: (x / x.sum()) * 100)
@@ -306,10 +310,10 @@ else:
                 tooltip=['event_name_display:N', 'acct_rep_full_name:N', 'block_full_price:Q', 'sales_percentage:Q']
             ).properties(
                 width=800,
-                height=400,
-                title='Sales Distribution by Rep for Each Game'
+                height=400
             )
         
             # Display the chart
             st.altair_chart(bar_chart_sales_dist, use_container_width=True)
+
 
