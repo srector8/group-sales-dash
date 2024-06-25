@@ -14,7 +14,6 @@ import altair as alt
 # Load your data
 @st.cache_data
 def load_data():
-    # Replace 'your_data.csv' with your actual data file
     df = pd.read_csv('group_sales.csv')
     df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     return df
