@@ -185,13 +185,15 @@ else:
 
             # Display the charts with appropriate labels
             st.altair_chart(rep_chart_sales, use_container_width=True)
+            if not rep_time_series_sales.empty:
+                total_rep_sales = rep_time_series_sales['Total Sales'].sum()
+                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total sales over all time.")
+            
             st.altair_chart(rep_chart_orders, use_container_width=True)
             st.altair_chart(rep_chart_tickets, use_container_width=True)
 
             # Print statements for total metrics
-            if not rep_time_series_sales.empty:
-                total_rep_sales = rep_time_series_sales['Total Sales'].sum()
-                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total sales over all time.")
+           
 
             if not rep_time_series_orders.empty:
                 total_rep_orders = rep_time_series_orders['Total Orders'].sum()
