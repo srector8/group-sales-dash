@@ -10,18 +10,10 @@ Original file is located at
 import streamlit as st
 import pandas as pd
 import altair as alt
-import chardet
-
-# Function to detect file encoding
-def detect_encoding(file_path):
-    with open(file_path, 'rb') as file:
-        raw_data = file.read(10000)  # Read the first 10,000 bytes
-    result = chardet.detect(raw_data)
-    return result['encoding']
 
 # Load your data
 @st.cache_data
-def load_data(file_path, encoding):
+def load_data(file_path, encoding='utf-8'):
     try:
         df = pd.read_csv(file_path, encoding=encoding)
     except UnicodeDecodeError as e:
@@ -32,16 +24,13 @@ def load_data(file_path, encoding):
     return df
 
 # Specify your CSV file path
-data_file = 'group_sales.csv'
+data_file = 'your_data.csv'
 
-# Try different encodings based on your knowledge or inspection
-encodings_to_try = ['utf-8', 'latin1', 'iso-8859-1', 'utf-16']
+# Specify the encoding (adjust as needed)
+encoding = 'utf-8'
 
-data = None
-for encoding in encodings_to_try:
-    data = load_data(data_file, encoding)
-    if data is not None:
-        break
+# Load data
+data = load_data(data_file, encoding=encoding)
 
 if data is None:
     st.error("Failed to load data. Please check the file encoding and try again.")
