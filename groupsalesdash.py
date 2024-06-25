@@ -13,7 +13,7 @@ import altair as alt
 
 # Load your data
 @st.cache_data
-def load_data(file_path, encoding='utf-8'):
+def load_data(file_path, encoding):
     try:
         df = pd.read_csv(file_path, encoding=encoding)
     except UnicodeDecodeError as e:
@@ -23,14 +23,16 @@ def load_data(file_path, encoding='utf-8'):
     df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     return df
 
-# Specify your CSV file path
-data_file = 'your_data.csv'
+data_file = 'group_sales.csv'
 
-# Specify the encoding (adjust as needed)
-encoding = 'utf-8'
+# Try different encodings based on your knowledge or inspection
+encodings_to_try = ['utf-8', 'latin1', 'iso-8859-1', 'utf-16']
 
-# Load data
-data = load_data(data_file, encoding=encoding)
+data = None
+for encoding in encodings_to_try:
+    data = load_data(data_file, encoding)
+    if data is not None:
+        break
 
 if data is None:
     st.error("Failed to load data. Please check the file encoding and try again.")
@@ -42,20 +44,20 @@ else:
     filtered_data = data[data['event_name'] == event_name]
 
     # Prepare data for time-series plots
-    # Total sales per day
-    sales_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-    sales_data.columns = ['date', 'total_sales']
+    # Total sales over time
+    time_series_sales = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
+    time_series_sales.columns = ['date', 'total_sales']
 
-    # Total orders per day (counting rows)
-    orders_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
-    orders_data.columns = ['date', 'total_orders']
+    # Total orders per day
+    time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
+    time_series_orders.columns = ['date', 'total_orders']
 
-    # Total tickets sold per day (sum of num_seats)
-    tickets_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
-    tickets_data.columns = ['date', 'total_tickets_sold']
+    # Total tickets sold per day
+    time_series_tickets = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
+    time_series_tickets.columns = ['date', 'total_tickets']
 
-    # Time-series line charts using Altair
-    chart_sales = alt.Chart(sales_data).mark_line().encode(
+    # Time-series line chart using Altair for total sales
+    chart_sales = alt.Chart(time_series_sales).mark_line().encode(
         x='date:T',
         y='total_sales:Q',
         tooltip=['date:T', 'total_sales:Q']
@@ -65,7 +67,8 @@ else:
         height=300
     )
 
-    chart_orders = alt.Chart(orders_data).mark_line().encode(
+    # Time-series line chart using Altair for total orders
+    chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
         x='date:T',
         y='total_orders:Q',
         tooltip=['date:T', 'total_orders:Q']
@@ -75,10 +78,11 @@ else:
         height=300
     )
 
-    chart_tickets = alt.Chart(tickets_data).mark_line().encode(
+    # Time-series line chart using Altair for total tickets sold
+    chart_tickets = alt.Chart(time_series_tickets).mark_line(color='green').encode(
         x='date:T',
-        y='total_tickets_sold:Q',
-        tooltip=['date:T', 'total_tickets_sold:Q']
+        y='total_tickets:Q',
+        tooltip=['date:T', 'total_tickets:Q']
     ).properties(
         title=f'Total Tickets Sold Over Time for Event: {event_name}',
         width=800,
