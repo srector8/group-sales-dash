@@ -287,7 +287,6 @@ else:
             sales_distribution = data.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
         
             # Calculate percentage of sales for each rep for each game
-            sales_distribution['block_full_price'] = pd.to_numeric(sales_distribution['block_full_price'], errors='coerce')
 
             sales_distribution['sales_percentage'] = sales_distribution.groupby('event_name_display')['block_full_price'].apply(lambda x: (x / x.sum() * 100) if x.sum() != 0 else 0)
 
