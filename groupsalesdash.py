@@ -11,7 +11,6 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
-# Load your data
 @st.cache_data
 def load_data(file_path, encoding):
     try:
@@ -25,7 +24,6 @@ def load_data(file_path, encoding):
 
 data_file = 'group_sales.csv'
 
-# Try different encodings based on your knowledge or inspection
 encodings_to_try = ['utf-8', 'latin1', 'iso-8859-1', 'utf-16']
 
 data = None
@@ -37,11 +35,38 @@ for encoding in encodings_to_try:
 if data is None:
     st.error("Failed to load data. Please check the file encoding and try again.")
 else:
+    # Mapping event_name values to display values
+    event_name_mapping = {
+        'E240509': '5/9 v.s. Liberty',
+        'E240514L': '5/14 v.s. Fever',
+        'E240517': '5/17 v.s. Mystic',
+        'E240523': '5/23 v.s. Lynx',
+        'E240528L': '5/28 v.s. Mercury',
+        'E240531L': '5/31 v.s. Wings',
+        'E240604L': '6/4 v.s. Mystics',
+        'E240608L': '6/8 v.s. Liberty',
+        'E240610L': '6/10 v.s. Fever',
+        'E240618': '6/18 v.s. Sparks',
+        'E240628': '6/28 v.s. Dream',
+        'E240707': '7/7 v.s. Dream',
+        'E240710': '7/10 v.s. Liberty',
+        'E240714': '7/14 v.s. Mercury',
+        'E240823L': '8/23 v.s. Sky',
+        'E240901L': '9/1 v.s. Storm',
+        'E240903': '9/3 v.s. Storm',
+        'E240906L': '9/6 v.s. Aces',
+        'E240917L': '9/17 v.s. Lynx',
+        'E240919L': '9/19 v.s. Sky'
+    }
+
+    # Replace event_name with mapped values
+    data['event_name_display'] = data['event_name'].map(event_name_mapping).fillna(data['event_name'])
+
     # Sidebar for event selection
-    event_name = st.sidebar.selectbox('Select Event', data['event_name'].unique())
+    event_name = st.sidebar.selectbox('Select Event', sorted(data['event_name_display'].unique()))
 
     # Filter data based on selected event
-    filtered_data = data[data['event_name'] == event_name]
+    filtered_data = data[data['event_name_display'] == event_name]
 
     # Prepare data for time-series plots
     # Total sales over time
