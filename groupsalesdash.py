@@ -40,8 +40,27 @@ if data is None:
 else:
     # Define mapping for event_name
     event_name_mapping = {
+        'E240509': '5/9 v.s. Liberty',
+        'E240514L': '5/14 v.s. Fever',
+        'E240517': '5/17 v.s. Mystic',
         'E240523': '5/23 v.s. Lynx',
-        # Add more mappings as needed
+        'E240528L': '5/28 v.s. Mercury',
+        'E240531L': '5/31 v.s. Wings',
+        'E240604L': '6/4 v.s. Mystics',
+        'E240608L': '6/8 v.s. Liberty',
+        'E240610L': '6/10 v.s. Fever',
+        'E240618': '6/18 v.s. Sparks',
+        'E240628': '6/28 v.s. Dream',
+        'E240707': '7/7 v.s. Dream',
+        'E240710': '7/10 v.s. Liberty',
+        'E240714': '7/14 v.s. Mercury',
+        'E240823L': '8/23 v.s. Sky',
+        'E240901L': '9/1 v.s. Storm',
+        'E240903': '9/3 v.s. Storm',
+        'E240906L': '9/6 v.s. Aces',
+        'E240917L': '9/17 v.s. Lynx',
+        'E240919L': '9/19 v.s. Sky'
+       
     }
 
     # Replace event_name with mapped values
