@@ -132,7 +132,7 @@ else:
             
         st.altair_chart(chart_orders, use_container_width=True)
         if not time_series_orders.empty:
-            total_orders = time_series_orders['total_orders'].sum()
+            total_orders = time_series_orders['Total Orders'].sum()
             st.info(f"{event_name} has accumulated {total_orders} total group orders over all time.")
             
         st.altair_chart(chart_tickets, use_container_width=True)
