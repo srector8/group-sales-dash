@@ -223,7 +223,8 @@ else:
         cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
                                                  ['Cumulative Sales ($) by Rep', 
                                                   'Cumulative Ticket Orders by Rep', 
-                                                  'Cumulative Tickets Sold by Rep'])
+                                                  'Cumulative Tickets Sold by Rep',
+                                                'Sales Distribution by Rep for Each Game'])
     
         if cumulative_option == 'Cumulative Sales ($) by Rep':
             # Calculate cumulative sales by sales rep
@@ -281,3 +282,24 @@ else:
     
             # Display the chart
             st.altair_chart(bar_chart_tickets, use_container_width=True)
+        elif cumulative_option == 'Sales Distribution by Rep for Each Game':
+            # Prepare data for sales distribution by rep for each game
+            sales_distribution = data.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
+        
+            # Calculate percentage of sales for each rep for each game
+            sales_distribution['sales_percentage'] = sales_distribution.groupby('event_name_display')['block_full_price'].apply(lambda x: x / x.sum() * 100)
+        
+            # Bar chart for sales distribution by rep for each game
+            bar_chart_sales_dist = alt.Chart(sales_distribution).mark_bar().encode(
+                x=alt.X('event_name_display', axis=alt.Axis(title='Game')),
+                y=alt.Y('sales_percentage:Q', stack='normalize', axis=alt.Axis(format='%'), title='Sales Percentage'),
+                color='acct_rep_full_name:N',
+                tooltip=['event_name_display', 'acct_rep_full_name', 'block_full_price', 'sales_percentage']
+            ).properties(
+                width=800,
+                height=400,
+                title='Sales Distribution by Rep for Each Game'
+            )
+        
+            # Display the chart
+            st.altair_chart(bar_chart_sales_dist, use_container_width=True)
