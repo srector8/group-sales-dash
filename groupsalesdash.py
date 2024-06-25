@@ -13,33 +13,50 @@ import altair as alt
 
 # Load your data
 @st.cache_data
-def load_data():
-    df = pd.read_csv('group_sales.csv')
+def load_data(file_path, encoding):
+    try:
+        df = pd.read_csv(file_path, encoding=encoding)
+    except UnicodeDecodeError as e:
+        st.error(f"Error reading the file: {e}")
+        return None
+    
     df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     return df
 
-data = load_data()
+data_file = 'group_sales.csv'
 
-# Sidebar for event selection
-event_name = st.sidebar.selectbox('Select Event', data['event_name'].unique())
+# Try different encodings based on your knowledge or inspection
+encodings_to_try = ['utf-8', 'latin1', 'iso-8859-1', 'utf-16']
 
-# Filter data based on selected event
-filtered_data = data[data['event_name'] == event_name]
+data = None
+for encoding in encodings_to_try:
+    data = load_data(data_file, encoding)
+    if data is not None:
+        break
 
-# Prepare data for time-series plot
-time_series_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-time_series_data.columns = ['date', 'total_sales']
+if data is None:
+    st.error("Failed to load data. Please check the file encoding and try again.")
+else:
+    # Sidebar for event selection
+    event_name = st.sidebar.selectbox('Select Event', data['event_name'].unique())
 
-# Time-series line chart using Altair
-chart = alt.Chart(time_series_data).mark_line().encode(
-    x='date:T',
-    y='total_sales:Q',
-    tooltip=['date:T', 'total_sales:Q']
-).properties(
-    title=f'Total Sales Over Time for Event: {event_name}',
-    width=800,
-    height=400
-)
+    # Filter data based on selected event
+    filtered_data = data[data['event_name'] == event_name]
 
-# Display the chart
-st.altair_chart(chart, use_container_width=True)
+    # Prepare data for time-series plot
+    time_series_data = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
+    time_series_data.columns = ['date', 'total_sales']
+
+    # Time-series line chart using Altair
+    chart = alt.Chart(time_series_data).mark_line().encode(
+        x='date:T',
+        y='total_sales:Q',
+        tooltip=['date:T', 'total_sales:Q']
+    ).properties(
+        title=f'Total Sales Over Time for Event: {event_name}',
+        width=800,
+        height=400
+    )
+
+    # Display the chart
+    st.altair_chart(chart, use_container_width=True)
