@@ -194,7 +194,7 @@ else:
                 st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total sales over all time.")
 
             if not rep_time_series_orders.empty:
-                total_rep_orders = rep_time_series_orders['total_orders'].sum()
+                total_rep_orders = rep_time_series_orders['Total Orders'].sum()
                 st.info(f"{sales_rep} has accumulated {total_rep_orders} total orders over all time.")
 
             if not rep_time_series_tickets.empty:
