@@ -317,4 +317,14 @@ else:
             # Display the chart
             st.altair_chart(bar_chart_sales_dist, use_container_width=True)
 
-
+            # Find the top salesman for each game
+            top_salesman_per_game = sales_distribution.loc[sales_distribution.groupby('event_name_display')['block_full_price'].idxmax()]
+            
+            # Create a DataFrame for the table
+            top_salesman_table = top_salesman_per_game[['event_name_display', 'acct_rep_full_name']]
+            top_salesman_table.columns = ['Game', 'Top Salesman']
+            
+            # Display the table
+            st.table(top_salesman_table)
+            
+            
