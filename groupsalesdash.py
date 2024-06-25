@@ -191,7 +191,7 @@ else:
             # Print statements for total metrics
             if not rep_time_series_sales.empty:
                 total_rep_sales = rep_time_series_sales['Total Sales'].sum()
-                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in group sales over all time.")
+                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in total sales over all time.")
 
             if not rep_time_series_orders.empty:
                 total_rep_orders = rep_time_series_orders['total_orders'].sum()
