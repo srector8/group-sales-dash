@@ -214,7 +214,7 @@ else:
             if not rep_time_series_tickets.empty:
                 total_rep_tickets = rep_time_series_tickets['Total Tickets Sold'].sum()
                 st.info(f"{sales_rep} has sold {total_rep_tickets} total group tickets over this time.")
-    elif page == 'Cumulative Graphs':
+    elif page == 'Cumulative Stats for Reps':
     # Sidebar for cumulative graphs selection
         cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
                                              ['Cumulative Sales ($) by Rep', 
