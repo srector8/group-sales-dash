@@ -71,7 +71,7 @@ else:
     # Page selection
     page = st.sidebar.selectbox('Select Page', ['Sales by Game', 'Sales Rep Performance'])
 
-    if page == 'Group Sales Dashboard':
+    if page == 'Sales by Game':
         # Sidebar for event selection
         event_name = st.sidebar.selectbox('Select Event', sorted(data['event_name_display'].unique()))
 
