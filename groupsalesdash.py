@@ -11,7 +11,8 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
-# Load your data
+st.set_page_config(page_title="Group Sales Dashboard")
+
 @st.cache_data
 def load_data(file_path, encoding):
     try:
