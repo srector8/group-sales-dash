@@ -291,7 +291,7 @@ else:
     
             # Display the chart
             st.altair_chart(bar_chart_tickets, use_container_width=True)
-       elif cumulative_option == 'Sales Distribution by Rep for Each Game':
+        elif cumulative_option == 'Sales Distribution by Rep for Each Game':
             # Prepare data for sales distribution by rep for each game
             sales_distribution = data.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
         
@@ -312,3 +312,4 @@ else:
         
             # Display the chart
             st.altair_chart(bar_chart_sales_dist, use_container_width=True)
+
