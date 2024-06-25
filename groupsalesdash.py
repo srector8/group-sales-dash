@@ -11,8 +11,10 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
+# Set the title of the Streamlit page
 st.set_page_config(page_title="Group Sales Dashboard")
 
+# Load your data
 @st.cache_data
 def load_data(file_path, encoding):
     try:
@@ -24,6 +26,7 @@ def load_data(file_path, encoding):
     df['add_datetime'] = pd.to_datetime(df['add_datetime'])
     return df
 
+# Specify your CSV file path
 data_file = 'group_sales.csv'
 
 # Try different encodings based on your knowledge or inspection
@@ -40,36 +43,17 @@ if data is None:
 else:
     # Define mapping for event_name
     event_name_mapping = {
-        'E240509': '5/9 v.s. Liberty',
-        'E240514L': '5/14 v.s. Fever',
-        'E240517': '5/17 v.s. Mystic',
         'E240523': '5/23 v.s. Lynx',
-        'E240528L': '5/28 v.s. Mercury',
-        'E240531L': '5/31 v.s. Wings',
-        'E240604L': '6/4 v.s. Mystics',
-        'E240608L': '6/8 v.s. Liberty',
-        'E240610L': '6/10 v.s. Fever',
-        'E240618': '6/18 v.s. Sparks',
-        'E240628': '6/28 v.s. Dream',
-        'E240707': '7/7 v.s. Dream',
-        'E240710': '7/10 v.s. Liberty',
-        'E240714': '7/14 v.s. Mercury',
-        'E240823L': '8/23 v.s. Sky',
-        'E240901L': '9/1 v.s. Storm',
-        'E240903': '9/3 v.s. Storm',
-        'E240906L': '9/6 v.s. Aces',
-        'E240917L': '9/17 v.s. Lynx',
-        'E240919L': '9/19 v.s. Sky'
-       
+        # Add more mappings as needed
     }
 
     # Replace event_name with mapped values
     data['event_name_display'] = data['event_name'].map(event_name_mapping).fillna(data['event_name'])
 
     # Page selection
-    page = st.sidebar.selectbox('Select Page', ['Sales by Game', 'Sales Rep Performance'])
+    page = st.sidebar.selectbox('Select Page', ['Group Sales Dashboard', 'Sales Rep Performance'])
 
-    if page == 'Sales by Game':
+    if page == 'Group Sales Dashboard':
         # Sidebar for event selection
         event_name = st.sidebar.selectbox('Select Event', sorted(data['event_name_display'].unique()))
 
@@ -126,6 +110,19 @@ else:
         st.altair_chart(chart_sales, use_container_width=True)
         st.altair_chart(chart_orders, use_container_width=True)
         st.altair_chart(chart_tickets, use_container_width=True)
+
+        # Print statements for total metrics
+        if not time_series_sales.empty:
+            total_sales = time_series_sales['Total Sales'].sum()
+            st.info(f"{event_name} has reached ${total_sales:.2f} in total sales over all time.")
+
+        if not time_series_orders.empty:
+            total_orders = time_series_orders['total_orders'].sum()
+            st.info(f"{event_name} has accumulated {total_orders} total orders over all time.")
+
+        if not time_series_tickets.empty:
+            total_tickets = time_series_tickets['Total Tickets Sold'].sum()
+            st.info(f"{event_name} has sold {total_tickets} total tickets over all time.")
 
     elif page == 'Sales Rep Performance':
         # Filter representatives with at least 30 rows
@@ -190,3 +187,16 @@ else:
             st.altair_chart(rep_chart_sales, use_container_width=True)
             st.altair_chart(rep_chart_orders, use_container_width=True)
             st.altair_chart(rep_chart_tickets, use_container_width=True)
+
+            # Print statements for total metrics
+            if not rep_time_series_sales.empty:
+                total_rep_sales = rep_time_series_sales['Total Sales'].sum()
+                st.info(f"{sales_rep} has reached ${total_rep_sales:.2f} in group sales over all time.")
+
+            if not rep_time_series_orders.empty:
+                total_rep_orders = rep_time_series_orders['total_orders'].sum()
+                st.info(f"{sales_rep} has accumulated {total_rep_orders} total orders over all time.")
+
+            if not rep_time_series_tickets.empty:
+                total_rep_tickets = rep_time_series_tickets['Total Tickets Sold'].sum()
+                st.info(f"{sales_rep} has sold {total_rep_tickets} total tickets over all time.")
