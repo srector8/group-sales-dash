@@ -336,7 +336,7 @@ else:
             cumulative_sales_by_rep.columns = ['Sales Representative', 'Total Sales ($)']
             st.write(cumulative_sales_by_rep)
     
-       elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
+        elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
             # Calculate cumulative ticket orders by sales rep
             unique_orders_by_rep = data.groupby('acct_rep_full_name')['acct_id'].nunique().reset_index(name='total_orders')
         
