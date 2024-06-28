@@ -165,7 +165,7 @@ else:
             rep_time_series_sales.columns = ['Date', 'Total Sales']  
 
             # Total orders per day
-            rep_time_series_orders = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
+            rep_time_series_orders = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date)['acct_id'].nunique().reset_index(name='total_orders')
             rep_time_series_orders.columns = ['Date', 'Total Orders']  
 
             # Total tickets sold per day
