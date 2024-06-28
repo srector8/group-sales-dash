@@ -329,6 +329,10 @@ else:
     
             # Display the chart
             st.altair_chart(bar_chart_sales, use_container_width=True)
+
+            st.write("Table for Cumulative Group Sales ($) by Rep")
+            cumulative_sales_by_rep.columns = ['Sales Representative', 'Total Sales ($)']
+            st.write(cumulative_sales_by_rep)
     
         elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
             # Calculate cumulative ticket orders by sales rep
@@ -348,6 +352,10 @@ else:
     
             # Display the chart
             st.altair_chart(bar_chart_orders, use_container_width=True)
+
+            st.write("Table for Cumulative Group Ticket Orders by Rep")
+            cumulative_orders_by_rep.columns = ['Sales Representative', 'Total Orders']
+            st.write(cumulative_orders_by_rep)
     
         elif cumulative_option == 'Cumulative Group Tickets Sold by Rep':
             # Calculate cumulative tickets sold by sales rep
@@ -367,6 +375,11 @@ else:
     
             # Display the chart
             st.altair_chart(bar_chart_tickets, use_container_width=True)
+
+            st.write("Table for Cumulative Group Tickets Sold by Rep")
+            cumulative_tickets_sold_by_rep.columns = ['Sales Representative', 'Total Tickets Sold']
+            st.write(cumulative_tickets_sold_by_rep)        
+
         elif cumulative_option == 'Sales Distribution by Rep for Each Game':
             # Filter out representatives with fewer than 30 orders
             reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
