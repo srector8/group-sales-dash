@@ -90,7 +90,7 @@ else:
         time_series_sales.columns = ['Date', 'Total Sales']  
 
         # Total orders per day
-        time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
+        time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['acct_id'].nunique().reset_index(name='total_orders')
         time_series_orders.columns = ['Date', 'Total Orders']  
 
         # Total tickets sold per day
