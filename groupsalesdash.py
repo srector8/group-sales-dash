@@ -252,7 +252,7 @@ else:
             elif game_cumulative_option == 'Cumulative Group Orders for Each Game':
                 # Calculate cumulative orders by game
                 cumulative_orders_by_rep = data.groupby('acct_rep_full_name')['acct_id'].nunique().reset_index(name='total_orders')
-                cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
+                cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_rows)]
                 cumulative_orders_by_rep = cumulative_orders_by_rep.sort_values(by='total_orders', ascending=False)
             
                 # Bar chart for cumulative orders by game
