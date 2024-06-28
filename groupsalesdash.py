@@ -251,6 +251,7 @@ else:
         
                 # Table for cumulative sales by game
                 st.write("Table for Cumulative Group Sales ($) for Each Game")
+                cumulative_sales_by_game.columns = ['Event', 'Total Sales ($)']
                 st.write(cumulative_sales_by_game)
         
             elif game_cumulative_option == 'Cumulative Group Orders for Each Game':
