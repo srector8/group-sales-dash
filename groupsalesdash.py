@@ -317,7 +317,7 @@ else:
             # Display the chart
             st.altair_chart(bar_chart_sales, use_container_width=True)
     
-       elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
+        elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
             # Calculate cumulative ticket orders by sales rep
             cumulative_orders_by_rep = data.groupby('acct_rep_full_name')['acct_id'].nunique().reset_index(name='total_orders')
             cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
