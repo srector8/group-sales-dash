@@ -90,7 +90,8 @@ else:
         time_series_sales.columns = ['Date', 'Total Sales']  
 
         # Total orders per day
-        time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
+        time_series_orders = filtered_data.groupby([filtered_data['add_datetime'].dt.date, 'acct_id']).size().reset_index(name='total_orders')
+        time_series_orders = time_series_orders.groupby('add_datetime')['total_orders'].sum().reset_index()
         time_series_orders.columns = ['Date', 'Total Orders']  
 
         # Total tickets sold per day
@@ -165,8 +166,10 @@ else:
             rep_time_series_sales.columns = ['Date', 'Total Sales']  
 
             # Total orders per day
-            rep_time_series_orders = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date).size().reset_index(name='total_orders')
-            rep_time_series_orders.columns = ['Date', 'Total Orders']  
+            rep_time_series_orders = filtered_rep_data.groupby([filtered_rep_data['add_datetime'].dt.date, 'acct_id']).size().reset_index(name='total_orders')
+            rep_time_series_orders = rep_time_series_orders.groupby('add_datetime')['total_orders'].sum().reset_index()
+            rep_time_series_orders.columns = ['Date', 'Total Orders']
+  
 
             # Total tickets sold per day
             rep_time_series_tickets = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
@@ -251,7 +254,8 @@ else:
             
             elif game_cumulative_option == 'Cumulative Group Orders for Each Game':
                 # Calculate cumulative orders by game
-                cumulative_orders_by_game = data.groupby('event_name_display').size().reset_index(name='total_orders')
+                cumulative_orders_by_game = data.groupby(['event_name_display', 'acct_id']).size().reset_index(name='total_orders')
+                cumulative_orders_by_game = cumulative_orders_by_game.groupby('event_name_display')['total_orders'].sum().reset_index()
                 cumulative_orders_by_game = cumulative_orders_by_game.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
             
                 # Bar chart for cumulative orders by game
@@ -318,7 +322,8 @@ else:
     
         elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
             # Calculate cumulative ticket orders by sales rep
-            cumulative_orders_by_rep = data.groupby('acct_rep_full_name').size().reset_index(name='total_orders')
+            cumulative_orders_by_rep = data.groupby(['acct_rep_full_name', 'acct_id']).size().reset_index(name='total_orders')
+            cumulative_orders_by_rep = cumulative_orders_by_rep.groupby('acct_rep_full_name')['total_orders'].sum().reset_index()
             cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
             cumulative_orders_by_rep = cumulative_orders_by_rep.sort_values(by='total_orders', ascending=False)
     
