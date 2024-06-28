@@ -97,6 +97,18 @@ else:
             time_series_tickets = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
             time_series_tickets.columns = ['Date', 'Total Tickets Sold']  
         
+            # Calculate historical averages before the selected event
+            historical_data = data[data['event_name_display'] != event_name]
+        
+            avg_sales = historical_data.groupby(historical_data['add_datetime'].dt.date)['block_full_price'].mean().reset_index()
+            avg_sales.columns = ['Date', 'Average Sales']
+            
+            avg_orders = historical_data.groupby(historical_data['add_datetime'].dt.date)['acct_id'].nunique().reset_index(name='average_orders')
+            avg_orders.columns = ['Date', 'Average Orders']
+            
+            avg_tickets = historical_data.groupby(historical_data['add_datetime'].dt.date)['num_seats'].mean().reset_index()
+            avg_tickets.columns = ['Date', 'Average Tickets Sold']
+        
             # Prepare data for cumulative time-series plots
             # Cumulative total sales over time
             time_series_sales['Cumulative Sales'] = time_series_sales['Total Sales'].cumsum()
@@ -118,6 +130,15 @@ else:
                 height=300
             )
         
+            # Average sales line
+            avg_sales_line = alt.Chart(avg_sales).mark_line(color='red').encode(
+                x='Date:T',
+                y='Average Sales:Q',
+                tooltip=['Date:T', 'Average Sales:Q']
+            )
+        
+            chart_sales += avg_sales_line
+        
             # Time-series line chart using Altair for cumulative total orders
             chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
                 x='Date:T',
@@ -128,6 +149,15 @@ else:
                 width=800,
                 height=300
             )
+        
+            # Average orders line
+            avg_orders_line = alt.Chart(avg_orders).mark_line(color='blue').encode(
+                x='Date:T',
+                y='Average Orders:Q',
+                tooltip=['Date:T', 'Average Orders:Q']
+            )
+        
+            chart_orders += avg_orders_line
         
             # Time-series line chart using Altair for cumulative total tickets sold
             chart_tickets = alt.Chart(time_series_tickets).mark_line(color='green').encode(
@@ -140,10 +170,20 @@ else:
                 height=300
             )
         
-            # Display the cumulative charts
+            # Average tickets sold line
+            avg_tickets_line = alt.Chart(avg_tickets).mark_line(color='purple').encode(
+                x='Date:T',
+                y='Average Tickets Sold:Q',
+                tooltip=['Date:T', 'Average Tickets Sold:Q']
+            )
+        
+            chart_tickets += avg_tickets_line
+        
+            # Display the cumulative charts with average lines
             st.altair_chart(chart_sales, use_container_width=True)
             st.altair_chart(chart_orders, use_container_width=True)
             st.altair_chart(chart_tickets, use_container_width=True)
+
 
     elif page == 'Sales Rep Performance':
         # Filter representatives with at least 30 rows
