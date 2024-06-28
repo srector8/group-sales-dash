@@ -251,7 +251,7 @@ else:
             
             elif game_cumulative_option == 'Cumulative Group Orders for Each Game':
                 # Calculate cumulative orders by game
-                cumulative_orders_by_game = data.groupby('event_name_display').size().reset_index(name='total_orders')
+                cumulative_orders_by_game = data.groupby(['event_name_display', 'acct_id']).size().groupby('event_name_display').count().reset_index(name='total_orders')
                 cumulative_orders_by_game = cumulative_orders_by_game.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
             
                 # Bar chart for cumulative orders by game
