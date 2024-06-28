@@ -84,67 +84,53 @@ else:
         # Filter data based on selected event
         filtered_data = data[data['event_name_display'] == event_name]
 
-        # Prepare data for time-series plots
-        # Total sales over time
-        time_series_sales = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['block_full_price'].sum().reset_index()
-        time_series_sales.columns = ['Date', 'Total Sales']  
-
-        # Total orders per day
-        time_series_orders = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['acct_id'].nunique().reset_index(name='total_orders')
-        time_series_orders.columns = ['Date', 'Total Orders']  
-
-        # Total tickets sold per day
-        time_series_tickets = filtered_data.groupby(filtered_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
-        time_series_tickets.columns = ['Date', 'Total Tickets Sold']  
-
-        # Time-series line chart using Altair for total sales
+        # Prepare data for cumulative time-series plots
+        # Cumulative total sales over time
+        time_series_sales['Cumulative Sales'] = time_series_sales['Total Sales'].cumsum()
+        
+        # Cumulative total orders over time
+        time_series_orders['Cumulative Orders'] = time_series_orders['Total Orders'].cumsum()
+        
+        # Cumulative total tickets sold over time
+        time_series_tickets['Cumulative Tickets Sold'] = time_series_tickets['Total Tickets Sold'].cumsum()
+        
+        # Time-series line chart using Altair for cumulative total sales
         chart_sales = alt.Chart(time_series_sales).mark_line().encode(
-            x='Date:T',  # Rename x-axis
-            y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')), 
-            tooltip=['Date:T', 'Total Sales:Q']
+            x='Date:T',
+            y=alt.Y('Cumulative Sales:Q', axis=alt.Axis(title='Cumulative Sales')), 
+            tooltip=['Date:T', 'Cumulative Sales:Q']
         ).properties(
-            title=f'Total Sales Over Time for Event: {event_name}',
+            title=f'Cumulative Sales Over Time for Event: {event_name}',
             width=800,
             height=300
         )
-
-        # Time-series line chart using Altair for total orders
+        
+        # Time-series line chart using Altair for cumulative total orders
         chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
-            x='Date:T',  # Rename x-axis
-            y=alt.Y('Total Orders:Q', axis=alt.Axis(title='Total Orders')),  
-            tooltip=['Date:T', 'Total Orders:Q']
+            x='Date:T',
+            y=alt.Y('Cumulative Orders:Q', axis=alt.Axis(title='Cumulative Orders')),  
+            tooltip=['Date:T', 'Cumulative Orders:Q']
         ).properties(
-            title=f'Total Orders Over Time for Event: {event_name}',
+            title=f'Cumulative Orders Over Time for Event: {event_name}',
             width=800,
             height=300
         )
-
-        # Time-series line chart using Altair for total tickets sold
+        
+        # Time-series line chart using Altair for cumulative total tickets sold
         chart_tickets = alt.Chart(time_series_tickets).mark_line(color='green').encode(
-            x='Date:T',  # Rename x-axis
-            y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  
-            tooltip=['Date:T', 'Total Tickets Sold:Q']
+            x='Date:T',
+            y=alt.Y('Cumulative Tickets Sold:Q', axis=alt.Axis(title='Cumulative Tickets Sold')),  
+            tooltip=['Date:T', 'Cumulative Tickets Sold:Q']
         ).properties(
-            title=f'Total Tickets Sold Over Time for Event: {event_name}',
+            title=f'Cumulative Tickets Sold Over Time for Event: {event_name}',
             width=800,
             height=300
         )
-
-        # Display the charts with appropriate labels
+        
+        # Display the cumulative charts
         st.altair_chart(chart_sales, use_container_width=True)
-        if not time_series_sales.empty:
-            total_sales = time_series_sales['Total Sales'].sum()
-            st.info(f"{event_name} has reached ${total_sales:.2f} in total group sales over all time.")
-            
         st.altair_chart(chart_orders, use_container_width=True)
-        if not time_series_orders.empty:
-            total_orders = time_series_orders['Total Orders'].sum()
-            st.info(f"{event_name} has accumulated {total_orders} total group orders over all time.")
-            
         st.altair_chart(chart_tickets, use_container_width=True)
-        if not time_series_tickets.empty:
-            total_tickets = time_series_tickets['Total Tickets Sold'].sum()
-            st.info(f"{event_name} has sold {total_tickets} total group tickets over all time.")
 
     elif page == 'Sales Rep Performance':
         # Filter representatives with at least 30 rows
