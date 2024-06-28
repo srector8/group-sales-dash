@@ -274,6 +274,7 @@ else:
         
                 # Table for cumulative orders by game
                 st.write("Table for Cumulative Group Orders for Each Game")
+                cumulative_orders_by_game.columns = ['Event', 'Total Orders']
                 st.write(cumulative_orders_by_game)
 
             elif game_cumulative_option == 'Cumulative Group Tickets for Each Game':
@@ -296,6 +297,7 @@ else:
         
                 # Table for cumulative tickets sold by game
                 st.write("Table for Cumulative Group Tickets for Each Game")
+                cumulative_tickets_by_game.columns = ['Event', 'Total Tickets']
                 st.write(cumulative_tickets_by_game)
     
     elif page == 'Cumulative Stats for Reps':
