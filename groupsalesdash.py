@@ -255,18 +255,15 @@ else:
                 st.write(cumulative_sales_by_game)
         
             elif game_cumulative_option == 'Cumulative Group Orders for Each Game':
-                # Group by event and acct_id to count unique orders
-                unique_orders = data.groupby(['event_name_display', 'acct_id']).size().reset_index(name='order_count')
-            
-                # Sum the unique orders per game
-                cumulative_orders_by_game = unique_orders.groupby('event_name_display')['order_count'].sum().reset_index()
-                cumulative_orders_by_game = cumulative_orders_by_game.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
+                # Group by event and count unique acct_id values
+                unique_orders = data.groupby('event_name_display')['acct_id'].nunique().reset_index(name='total_orders')
+                unique_orders = unique_orders.sort_values(by='event_name_display', key=lambda x: x.map(lambda name: sorted_events.index(name)))
             
                 # Bar chart for cumulative orders by game
-                bar_chart_game_orders = alt.Chart(cumulative_orders_by_game).mark_bar().encode(
+                bar_chart_game_orders = alt.Chart(unique_orders).mark_bar().encode(
                     x=alt.X('event_name_display', sort=sorted_events, axis=alt.Axis(title='Game')),
-                    y=alt.Y('order_count', axis=alt.Axis(title='Cumulative Group Orders')),
-                    tooltip=['event_name_display', 'order_count']
+                    y=alt.Y('total_orders', axis=alt.Axis(title='Cumulative Group Orders')),
+                    tooltip=['event_name_display', 'total_orders']
                 ).properties(
                     width=800,
                     height=400
@@ -277,8 +274,9 @@ else:
             
                 # Table for cumulative orders by game
                 st.write("Table for Cumulative Group Orders for Each Game")
-                cumulative_orders_by_game.columns = ['Event', 'Total Orders']
-                st.write(cumulative_orders_by_game)
+                unique_orders.columns = ['Event', 'Total Orders']
+                st.write(unique_orders)
+
 
 
             elif game_cumulative_option == 'Cumulative Group Tickets for Each Game':
