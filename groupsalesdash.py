@@ -336,22 +336,21 @@ else:
             cumulative_sales_by_rep.columns = ['Sales Representative', 'Total Sales ($)']
             st.write(cumulative_sales_by_rep)
     
-        elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
-            # Calculate cumulative ticket orders by sales rep and game
-            unique_orders_by_rep = data.groupby(['acct_rep_full_name', 'event_name_display'])['acct_id'].nunique().reset_index(name='total_orders')
+       elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
+            # Calculate cumulative ticket orders by sales rep
+            unique_orders_by_rep = data.groupby('acct_rep_full_name')['acct_id'].nunique().reset_index(name='total_orders')
         
             # Filter out reps with enough orders if needed
             unique_orders_by_rep = unique_orders_by_rep[unique_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
         
-            # Sort by total orders descending for each rep
-            unique_orders_by_rep = unique_orders_by_rep.sort_values(by=['acct_rep_full_name', 'total_orders'], ascending=[True, False])
+            # Sort by total orders descending
+            unique_orders_by_rep = unique_orders_by_rep.sort_values(by='total_orders', ascending=False)
         
-            # Bar chart for cumulative ticket orders by rep and game
+            # Bar chart for cumulative ticket orders by rep
             bar_chart_orders = alt.Chart(unique_orders_by_rep).mark_bar().encode(
                 x=alt.X('acct_rep_full_name', sort='-y', axis=alt.Axis(title='Sales Representative')),
                 y=alt.Y('total_orders', axis=alt.Axis(title='Cumulative Ticket Orders')),
-                color='event_name_display:N',
-                tooltip=['acct_rep_full_name', 'event_name_display', 'total_orders']
+                tooltip=['acct_rep_full_name', 'total_orders']
             ).properties(
                 width=800,
                 height=400
@@ -362,8 +361,9 @@ else:
         
             # Table for cumulative ticket orders by rep
             st.write("Table for Cumulative Group Ticket Orders by Rep")
-            unique_orders_by_rep.columns = ['Sales Representative', 'Event', 'Total Orders']
+            unique_orders_by_rep.columns = ['Sales Representative', 'Total Orders']
             st.write(unique_orders_by_rep)
+
 
     
         elif cumulative_option == 'Cumulative Group Tickets Sold by Rep':
