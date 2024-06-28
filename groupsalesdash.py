@@ -84,6 +84,9 @@ else:
         # Filter data based on selected event
         filtered_data = data[data['event_name_display'] == event_name]
         
+        # Ensure 'add_datetime' is in datetime format
+        filtered_data['add_datetime'] = pd.to_datetime(filtered_data['add_datetime'])
+        
         # Calculate days until each event date relative to the current date
         filtered_data['days_until_event'] = (filtered_data['add_datetime'].dt.date - pd.Timestamp.today().date()).dt.days
         
