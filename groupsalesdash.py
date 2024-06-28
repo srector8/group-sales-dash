@@ -337,27 +337,34 @@ else:
             st.write(cumulative_sales_by_rep)
     
         elif cumulative_option == 'Cumulative Group Ticket Orders by Rep':
-            # Calculate cumulative ticket orders by sales rep
-            cumulative_orders_by_rep = data.groupby('acct_rep_full_name').size().reset_index(name='total_orders')
-            cumulative_orders_by_rep = cumulative_orders_by_rep[cumulative_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
-            cumulative_orders_by_rep = cumulative_orders_by_rep.sort_values(by='total_orders', ascending=False)
-    
-            # Bar chart for cumulative ticket orders by rep
-            bar_chart_orders = alt.Chart(cumulative_orders_by_rep).mark_bar().encode(
+            # Calculate cumulative ticket orders by sales rep and game
+            unique_orders_by_rep = data.groupby(['acct_rep_full_name', 'event_name_display'])['acct_id'].nunique().reset_index(name='total_orders')
+        
+            # Filter out reps with enough orders if needed
+            unique_orders_by_rep = unique_orders_by_rep[unique_orders_by_rep['acct_rep_full_name'].isin(reps_with_enough_orders)]
+        
+            # Sort by total orders descending for each rep
+            unique_orders_by_rep = unique_orders_by_rep.sort_values(by=['acct_rep_full_name', 'total_orders'], ascending=[True, False])
+        
+            # Bar chart for cumulative ticket orders by rep and game
+            bar_chart_orders = alt.Chart(unique_orders_by_rep).mark_bar().encode(
                 x=alt.X('acct_rep_full_name', sort='-y', axis=alt.Axis(title='Sales Representative')),
                 y=alt.Y('total_orders', axis=alt.Axis(title='Cumulative Ticket Orders')),
-                tooltip=['acct_rep_full_name', 'total_orders']
+                color='event_name_display:N',
+                tooltip=['acct_rep_full_name', 'event_name_display', 'total_orders']
             ).properties(
                 width=800,
                 height=400
             )
-    
+        
             # Display the chart
             st.altair_chart(bar_chart_orders, use_container_width=True)
-
+        
+            # Table for cumulative ticket orders by rep
             st.write("Table for Cumulative Group Ticket Orders by Rep")
-            cumulative_orders_by_rep.columns = ['Sales Representative', 'Total Orders']
-            st.write(cumulative_orders_by_rep)
+            unique_orders_by_rep.columns = ['Sales Representative', 'Event', 'Total Orders']
+            st.write(unique_orders_by_rep)
+
     
         elif cumulative_option == 'Cumulative Group Tickets Sold by Rep':
             # Calculate cumulative tickets sold by sales rep
