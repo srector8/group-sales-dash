@@ -80,68 +80,74 @@ else:
     if page == 'Sales by Game':
         # Sidebar for event selection
         event_name = st.sidebar.selectbox('Select Event', sorted(data['event_name_display'].unique()))
+    
+        # Filter data based on selected event
         filtered_data = data[data['event_name_display'] == event_name]
-
-                # Prepare data for time-series plots
-                # Total sales over time
+    
+        # Prepare data for time-series plots
+        # Total sales over time
         time_series_sales = filtered_data.groupby('days_difference')['block_full_price'].sum().reset_index()
         time_series_sales.columns = ['Days Difference', 'Total Sales']  
+        time_series_sales = time_series_sales.sort_values(by='Days Difference', ascending=False)
     
-                # Total orders per day
+        # Total orders per day
         time_series_orders = filtered_data.groupby('days_difference')['acct_id'].nunique().reset_index(name='total_orders')
         time_series_orders.columns = ['Days Difference', 'Total Orders']  
+        time_series_orders = time_series_orders.sort_values(by='Days Difference', ascending=False)
     
-                # Total tickets sold per day
+        # Total tickets sold per day
         time_series_tickets = filtered_data.groupby('days_difference')['num_seats'].sum().reset_index()
         time_series_tickets.columns = ['Days Difference', 'Total Tickets Sold']  
+        time_series_tickets = time_series_tickets.sort_values(by='Days Difference', ascending=False)
     
-                # Prepare data for cumulative time-series plots
-                # Cumulative total sales over time
+        # Prepare data for cumulative time-series plots
+        # Cumulative total sales over time
         time_series_sales['Cumulative Sales'] = time_series_sales['Total Sales'].cumsum()
     
-                # Cumulative total orders over time
+        # Cumulative total orders over time
         time_series_orders['Cumulative Orders'] = time_series_orders['Total Orders'].cumsum()
     
-                # Cumulative total tickets sold over time
+        # Cumulative total tickets sold over time
         time_series_tickets['Cumulative Tickets Sold'] = time_series_tickets['Total Tickets Sold'].cumsum()
     
-                # Time-series line chart using Altair for cumulative total sales
+        # Time-series line chart using Altair for cumulative total sales
         chart_sales = alt.Chart(time_series_sales).mark_line().encode(
-                    x='Days Difference:Q',
-                    y=alt.Y('Cumulative Sales:Q', axis=alt.Axis(title='Cumulative Sales')), 
-                    tooltip=['Days Difference:Q', 'Cumulative Sales:Q']
-                ).properties(
-                    title=f'Cumulative Sales Over Time for Event: {event_name}',
-                    width=800,
-                    height=300
-                )
+            x=alt.X('Days Difference:Q', sort='descending'),
+            y=alt.Y('Cumulative Sales:Q', axis=alt.Axis(title='Cumulative Sales')), 
+            tooltip=['Days Difference:Q', 'Cumulative Sales:Q']
+        ).properties(
+            title=f'Cumulative Sales Over Time for Event: {event_name}',
+            width=800,
+            height=300
+        )
     
-                # Time-series line chart using Altair for cumulative total orders
+        # Time-series line chart using Altair for cumulative total orders
         chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
-                    x='Days Difference:Q',
-                    y=alt.Y('Cumulative Orders:Q', axis=alt.Axis(title='Cumulative Orders')),  
-                    tooltip=['Days Difference:Q', 'Cumulative Orders:Q']
-                ).properties(
-                    title=f'Cumulative Orders Over Time for Event: {event_name}',
-                    width=800,
-                    height=300
-                )
+            x=alt.X('Days Difference:Q', sort='descending'),
+            y=alt.Y('Cumulative Orders:Q', axis=alt.Axis(title='Cumulative Orders')),  
+            tooltip=['Days Difference:Q', 'Cumulative Orders:Q']
+        ).properties(
+            title=f'Cumulative Orders Over Time for Event: {event_name}',
+            width=800,
+            height=300
+        )
     
-                # Time-series line chart using Altair for cumulative total tickets sold
+        # Time-series line chart using Altair for cumulative total tickets sold
         chart_tickets = alt.Chart(time_series_tickets).mark_line(color='green').encode(
-                    x='Days Difference:Q',
-                    y=alt.Y('Cumulative Tickets Sold:Q', axis=alt.Axis(title='Cumulative Tickets Sold')),  
-                    tooltip=['Days Difference:Q', 'Cumulative Tickets Sold:Q']
-                ).properties(
-                    title=f'Cumulative Tickets Sold Over Time for Event: {event_name}',
-                    width=800,
-                    height=300
-                )
+            x=alt.X('Days Difference:Q', sort='descending'),
+            y=alt.Y('Cumulative Tickets Sold:Q', axis=alt.Axis(title='Cumulative Tickets Sold')),  
+            tooltip=['Days Difference:Q', 'Cumulative Tickets Sold:Q']
+        ).properties(
+            title=f'Cumulative Tickets Sold Over Time for Event: {event_name}',
+            width=800,
+            height=300
+        )
     
-                # Display the cumulative charts
+        # Display the cumulative charts
         st.altair_chart(chart_sales, use_container_width=True)
         st.altair_chart(chart_orders, use_container_width=True)
         st.altair_chart(chart_tickets, use_container_width=True)
+
 
     
     elif page == 'Sales Rep Performance':
