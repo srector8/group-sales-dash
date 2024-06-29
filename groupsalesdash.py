@@ -87,14 +87,7 @@ else:
         else:
             # Filter data based on selected event
             filtered_data = data[data['event_name_display'] == event_name]
-    
-            # Check if 'days_difference' column is present in the filtered data
-            if 'days_difference' not in filtered_data.columns:
-                st.error("'days_difference' column is not present in the filtered data after filtering.")
-            else:
-                # Display filtered data for debugging
-                st.write(filtered_data.head())
-    
+
                 # Prepare data for time-series plots
                 # Total sales over time
                 time_series_sales = filtered_data.groupby('days_difference')['block_full_price'].sum().reset_index()
