@@ -29,7 +29,7 @@ def load_data(file_path):
     return df
 
 # Specify your CSV file path
-data_file = 'group_sales.csv'
+data_file = 'group_sales1.csv'
 
 # Load data and convert to UTF-8
 data = load_data(data_file)
