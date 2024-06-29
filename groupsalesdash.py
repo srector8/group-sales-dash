@@ -123,14 +123,7 @@ else:
             width=800,
             height=300
         )
-        
-        chart_mean_sales = alt.Chart(mean_sales_data).mark_line(color='red').encode(
-            x=alt.X('days_difference:Q', sort='descending', title='Days Before the Game'),
-            y=alt.Y('mean_sales:Q', axis=alt.Axis(title='Mean Sales')),  
-        )
-
-
-        
+    
         # Time-series line chart using Altair for cumulative total orders
         chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
             x=alt.X('Days Difference:Q', sort='descending'),
@@ -154,7 +147,7 @@ else:
         )
     
         # Display the cumulative charts
-        st.altair_chart(chart_sales + chart_mean_sales, use_container_width=True)
+        st.altair_chart(chart_sales, use_container_width=True)
         st.altair_chart(chart_orders, use_container_width=True)
         st.altair_chart(chart_tickets, use_container_width=True)
 
