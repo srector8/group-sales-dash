@@ -111,16 +111,16 @@ else:
         time_series_tickets['Cumulative Tickets Sold'] = time_series_tickets['Total Tickets Sold'].cumsum()
     
         # Calculate average cumulative values for the entire dataset by event
-        cumulative_sales_by_event = data.groupby(['event_name_display', 'days_difference'])['block_full_price'].sum().groupby(level=0).cumsum().reset_index()
-        avg_cumulative_sales = cumulative_sales_by_event.groupby('days_difference')['block_full_price'].mean().reset_index()
+        data['Cumulative Sales'] = data.groupby('event_name_display')['block_full_price'].cumsum()
+        avg_cumulative_sales = data.groupby('days_difference')['Cumulative Sales'].mean().reset_index()
         avg_cumulative_sales.columns = ['Days Difference', 'Avg Cumulative Sales']
     
-        cumulative_orders_by_event = data.groupby(['event_name_display', 'days_difference'])['acct_id'].nunique().groupby(level=0).cumsum().reset_index()
-        avg_cumulative_orders = cumulative_orders_by_event.groupby('days_difference')['acct_id'].mean().reset_index()
+        data['Cumulative Orders'] = data.groupby('event_name_display')['acct_id'].cumsum()
+        avg_cumulative_orders = data.groupby('days_difference')['Cumulative Orders'].mean().reset_index()
         avg_cumulative_orders.columns = ['Days Difference', 'Avg Cumulative Orders']
     
-        cumulative_tickets_by_event = data.groupby(['event_name_display', 'days_difference'])['num_seats'].sum().groupby(level=0).cumsum().reset_index()
-        avg_cumulative_tickets = cumulative_tickets_by_event.groupby('days_difference')['num_seats'].mean().reset_index()
+        data['Cumulative Tickets Sold'] = data.groupby('event_name_display')['num_seats'].cumsum()
+        avg_cumulative_tickets = data.groupby('days_difference')['Cumulative Tickets Sold'].mean().reset_index()
         avg_cumulative_tickets.columns = ['Days Difference', 'Avg Cumulative Tickets Sold']
     
         # Time-series line chart using Altair for cumulative total sales with average line
