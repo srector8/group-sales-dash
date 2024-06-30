@@ -128,7 +128,7 @@ else:
 
         chart_mean_sales = alt.Chart(mean_sales_data).mark_line(color='red').encode(
             x=alt.X('days_difference:Q', sort='descending', title='Days Before the Game'),
-            y=alt.Y('mean_sales:Q', axis=alt.Axis(title='Mean Sales')),  
+            y=alt.Y('Cumulative Mean Sales:Q', axis=alt.Axis(title='Cumulative Mean Sales')),  
         )
 
     
