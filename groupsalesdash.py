@@ -79,6 +79,8 @@ else:
 
     mean_sales_data = pd.read_csv('daysdiff.csv')
 
+    mean_sales_data = mean_sales_data.sort_values(by='days_difference', ascending=False)
+    mean_sales_data['Cumulative Mean Sales'] = mean_sales_data['mean_sales'].cumsum()
     
     if page == 'Sales by Game':
         # Sidebar for event selection
