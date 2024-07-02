@@ -451,7 +451,6 @@ else:
                 x=alt.X('event_name_display:N', axis=alt.Axis(title='Game')),
                 y=alt.Y('sales_percentage:Q', stack='normalize', axis=alt.Axis(format='%'), title='Sales Percentage'),
                 color=alt.Color('acct_rep_full_name:N', legend=alt.Legend(title='Account Rep')),
-                order=alt.Order('sales_percentage:Q', sort='descending'),
                 tooltip=['event_name_display:N', 'acct_rep_full_name:N', 'block_full_price:Q', 'sales_percentage:Q']
             ).properties(
                 width=800,
