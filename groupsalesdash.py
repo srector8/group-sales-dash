@@ -145,7 +145,7 @@ else:
     
         # Time-series line chart using Altair for cumulative total tickets sold
         chart_tickets = alt.Chart(time_series_tickets).mark_line(color='green').encode(
-            x=alt.X('Days Difference:Q', sort='descending'),
+            x=alt.X('Days Difference:Q', sort='descending', title='Days Before the Game'),
             y=alt.Y('Cumulative Tickets Sold:Q', axis=alt.Axis(title='Cumulative Tickets Sold')),  
             tooltip=['Days Difference:Q', 'Cumulative Tickets Sold:Q']
         ).properties(
