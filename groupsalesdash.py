@@ -202,6 +202,8 @@ else:
                 width=800,
                 height=300
             )
+            
+            rep_time_series_orders = rep_time_series_orders.set_index('Date').resample('D').sum().reset_index()
 
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
@@ -242,13 +244,11 @@ else:
                 st.info(f"{sales_rep} has sold {total_rep_tickets} total group tickets over this time.")
 
     elif page == 'Cumulative Stats for Games':
-            # Sidebar for cumulative graphs selection
             game_cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
                                                           ['Cumulative Group Sales ($) for Each Game', 
                                                            'Cumulative Group Orders for Each Game', 
                                                            'Cumulative Group Tickets for Each Game'])
         
-            # Sort events by their display name using the mapping order
             sorted_events = [event_name_mapping[key] for key in event_name_mapping.keys() if key in data['event_name'].unique()]
         
             if game_cumulative_option == 'Cumulative Group Sales ($) for Each Game':
