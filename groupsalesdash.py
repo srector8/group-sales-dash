@@ -203,7 +203,6 @@ else:
                 height=300
             )
             
-            rep_time_series_orders = rep_time_series_orders.set_index('Date').resample('D').sum().reset_index()
 
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
