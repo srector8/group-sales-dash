@@ -196,7 +196,7 @@ else:
                                             end=rep_time_series_sales['Date'].max())
 
             rep_time_series_sales = rep_time_series_sales.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
-            st.write(rep_time_series_sales)
+
             # Time-series line chart using Altair for sales rep total sales
             rep_chart_sales = alt.Chart(rep_time_series_sales).mark_line().encode(
                 x='index:T',  
