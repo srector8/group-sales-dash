@@ -199,9 +199,9 @@ else:
             rep_time_series_sales = rep_time_series_sales.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
             # Time-series line chart using Altair for sales rep total sales
             rep_chart_sales = alt.Chart(rep_time_series_sales).mark_line().encode(
-                x='index:T',  
+                x='Date:T',  
                 y=alt.Y('Total Sales:Q', axis=alt.Axis(title='Total Sales')),  
-                tooltip=['index:T', 'Total Sales:Q']
+                tooltip=['Date:T', 'Total Sales:Q']
             ).properties(
                 title=f'Total Sales Over Time for {sales_rep}',
                 width=800,
@@ -235,9 +235,9 @@ else:
 
             # Time-series line chart using Altair for sales rep total tickets sold
             rep_chart_tickets = alt.Chart(rep_time_series_tickets).mark_line(color='green').encode(
-                x='index:T',  # Rename x-axis
+                x='Date:T',  # Rename x-axis
                 y=alt.Y('Total Tickets Sold:Q', axis=alt.Axis(title='Total Tickets Sold')),  
-                tooltip=['index:T', 'Total Tickets Sold:Q']
+                tooltip=['Date:T', 'Total Tickets Sold:Q']
             ).properties(
                 title=f'Total Tickets Sold Over Time for {sales_rep}',
                 width=800,
