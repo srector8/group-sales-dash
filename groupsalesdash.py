@@ -211,12 +211,13 @@ else:
 
             rep_time_series_orders = rep_time_series_orders.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
 
+            rep_time_series_orders.columns = ['Date', 'Total Orders']
 
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
-                x='index:T',  # Assuming index is the new date column after reindexing
+                x='Date:T',  # Assuming index is the new date column after reindexing
                 y=alt.Y('Total Orders:Q', axis=alt.Axis(title='Total Orders')),  
-                tooltip=['index:T', 'Total Orders:Q']
+                tooltip=['Date:T', 'Total Orders:Q']
             ).properties(
                 title=f'Total Orders Over Time for {sales_rep}',
                 width=800,
