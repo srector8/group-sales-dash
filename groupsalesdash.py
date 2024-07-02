@@ -192,6 +192,11 @@ else:
             rep_time_series_tickets = filtered_rep_data.groupby(filtered_rep_data['add_datetime'].dt.date)['num_seats'].sum().reset_index()
             rep_time_series_tickets.columns = ['Date', 'Total Tickets Sold']  
 
+            full_date_range = pd.date_range(start=rep_time_series_sales['Date'].min(),
+                                            end=rep_time_series_sales['Date'].max())
+
+            rep_time_series_sales = rep_time_series_sales.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
+
             # Time-series line chart using Altair for sales rep total sales
             rep_chart_sales = alt.Chart(rep_time_series_sales).mark_line().encode(
                 x='Date:T',  # Rename x-axis
@@ -207,7 +212,6 @@ else:
 
             rep_time_series_orders = rep_time_series_orders.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
 
-            st.write(rep_time_series_orders)
 
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
@@ -219,6 +223,12 @@ else:
                 width=800,
                 height=300
             )
+
+            full_date_range = pd.date_range(start=rep_time_series_tickets['Date'].min(),
+                                            end=rep_time_series_tickets['Date'].max())
+
+            rep_time_series_tickets = rep_time_series_tickets.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
+
 
             # Time-series line chart using Altair for sales rep total tickets sold
             rep_chart_tickets = alt.Chart(rep_time_series_tickets).mark_line(color='green').encode(
