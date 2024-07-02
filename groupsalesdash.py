@@ -475,7 +475,7 @@ else:
             # Create a DataFrame for the table
             top_salesman_table = top_salesman_per_game[['event_name_display', 'acct_rep_full_name']]
             top_salesman_table.columns = ['Game', 'Top Rep']
-            top_salesman_table = top_salesman_table.reset_index(drop=True)
+            top_salesman_table = top_salesman_table.sort_values(by=event_order).reset_index(drop=True)
             html_table = top_salesman_table.to_html(index=False)
             st.markdown(html_table, unsafe_allow_html=True)
             
