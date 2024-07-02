@@ -448,7 +448,7 @@ else:
 
 
             event_order = [
-                            '5/14 v.s. Fever', '5/17 v.s. Mystic', '5/23 v.s. Lynx', '5/28 v.s. Mercury', '5/31 v.s. Wings', '6/4 v.s. Mystics', '6/8 v.s. Liberty', '6/10 v.s. Fever', '6/18 v.s. Sparks', '6/28 v.s. Dream', '7/7 v.s. Dream', 
+                            '5/9 v.s. Liberty', '5/14 v.s. Fever', '5/17 v.s. Mystic', '5/23 v.s. Lynx', '5/28 v.s. Mercury', '5/31 v.s. Wings', '6/4 v.s. Mystics', '6/8 v.s. Liberty', '6/10 v.s. Fever', '6/18 v.s. Sparks', '6/28 v.s. Dream', '7/7 v.s. Dream', 
                             '7/10 v.s. Liberty', '7/14 v.s. Mercury', '8/23 v.s. Sky', '9/1 v.s. Storm', '9/3 v.s. Storm', '9/6 v.s. Aces', '9/17 v.s. Lynx', '9/19 v.s. Sky'
                         ]
 
