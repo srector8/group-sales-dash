@@ -412,6 +412,10 @@ else:
         elif cumulative_option == 'Sales Distribution by Rep for Each Game':
             # Filter out representatives with fewer than 30 orders
             reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
+
+            reps_to_exclude = ["Dan Tamburro", "Mitch Conrad", "Garet Griffin"]
+        
+            reps_with_enough_rows = [rep for rep in reps_with_enough_rows if rep not in reps_to_exclude]
         
             # Prepare data for sales distribution by rep for each game
             sales_distribution = data[data['acct_rep_full_name'].isin(reps_with_enough_orders)]
