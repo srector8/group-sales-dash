@@ -467,6 +467,7 @@ else:
             # Create a DataFrame for the table
             top_salesman_table = top_salesman_per_game[['event_name_display', 'acct_rep_full_name']]
             top_salesman_table.columns = ['Game', 'Top Rep']
+            top_salesman_table = top_salesman_table.reset_index(drop=True)
             
             # Display the table
             st.table(top_salesman_table)
