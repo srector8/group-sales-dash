@@ -117,7 +117,7 @@ else:
     
         # Time-series line chart using Altair for cumulative total sales
         chart_sales = alt.Chart(time_series_sales).mark_line().encode(
-            x=alt.X('Days Difference:Q', sort='descending'),
+            x=alt.X('Days Difference:Q', sort='descending', title='Days Before the Game'),
             y=alt.Y('Cumulative Sales:Q', axis=alt.Axis(title='Cumulative Sales')), 
             tooltip=['Days Difference:Q', 'Cumulative Sales:Q']
         ).properties(
@@ -134,7 +134,7 @@ else:
     
         # Time-series line chart using Altair for cumulative total orders
         chart_orders = alt.Chart(time_series_orders).mark_line(color='orange').encode(
-            x=alt.X('Days Difference:Q', sort='descending'),
+            x=alt.X('Days Difference:Q', sort='descending', title='Days Before the Game'),
             y=alt.Y('Cumulative Orders:Q', axis=alt.Axis(title='Cumulative Orders')),  
             tooltip=['Days Difference:Q', 'Cumulative Orders:Q']
         ).properties(
