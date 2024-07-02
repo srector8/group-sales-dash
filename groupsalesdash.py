@@ -446,9 +446,6 @@ else:
             # Calculate percentage of sales for each rep for each game
             sales_distribution['sales_percentage'] = sales_distribution.groupby('event_name_display')['block_full_price'].transform(lambda x: (x / x.sum()) * 100)
 
-            event_order = sorted(sales_distribution['event_name_display'].unique())
-
-
             # Bar chart for sales distribution by rep for each game
             bar_chart_sales_dist = alt.Chart(sales_distribution).mark_bar().encode(
                 x=alt.X('event_name_display:N', axis=alt.Axis(title='Game')),
