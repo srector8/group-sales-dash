@@ -207,6 +207,8 @@ else:
 
             rep_time_series_orders = rep_time_series_orders.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
 
+            st.write(rep_time_series_orders)
+
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
                 x='Date:T',  # Rename x-axis
