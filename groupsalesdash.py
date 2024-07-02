@@ -166,6 +166,10 @@ else:
         # Filter representatives with at least 30 rows
         reps_with_enough_rows = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
 
+        reps_to_exclude = ["Dan Tamburro", "Mitch Conrad", "Garet Griffin"]
+    
+        reps_with_enough_rows = [rep for rep in reps_with_enough_rows if rep not in reps_to_exclude]
+
         # Sidebar for sales rep selection
         sales_rep = st.sidebar.selectbox('Select Sales Representative', sorted(reps_with_enough_rows))
 
