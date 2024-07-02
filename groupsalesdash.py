@@ -202,8 +202,11 @@ else:
                 width=800,
                 height=300
             )
-            
-            st.write(rep_time_series_orders)
+            full_date_range = pd.date_range(start=rep_time_series_orders['Date'].min(),
+                                            end=rep_time_series_orders['Date'].max())
+
+            rep_time_series_orders = rep_time_series_orders.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
+
             # Time-series line chart using Altair for sales rep total orders
             rep_chart_orders = alt.Chart(rep_time_series_orders).mark_line(color='orange').encode(
                 x='Date:T',  # Rename x-axis
