@@ -325,7 +325,11 @@ else:
     elif page == 'Cumulative Stats for Reps':
         # Filter representatives with at least 30 orders
         reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
-    
+
+        reps_to_exclude = ["Dan Tamburro", "Mitch Conrad", "Garet Griffin"]
+        
+        reps_with_enough_orders = [rep for rep in reps_with_enough_orders if rep not in reps_to_exclude]
+        
         # Sidebar for cumulative graphs selection
         cumulative_option = st.sidebar.selectbox('Select Cumulative Graph', 
                                                  ['Cumulative Group Sales ($) by Rep', 
@@ -412,13 +416,12 @@ else:
         elif cumulative_option == 'Sales Distribution by Rep for Each Game':
             # Filter out representatives with fewer than 30 orders
             reps_with_enough_orders = data['acct_rep_full_name'].value_counts()[data['acct_rep_full_name'].value_counts() >= 30].index.tolist()
-
             reps_to_exclude = ["Dan Tamburro", "Mitch Conrad", "Garet Griffin"]
         
             reps_with_enough_orders = [rep for rep in reps_with_enough_orders if rep not in reps_to_exclude]
 
             # Prepare data for sales distribution by rep for each game
-            sales_distribution = data[data['acct_rep_full_name'].isin(reps_with_enough_rows)]
+            sales_distribution = data[data['acct_rep_full_name'].isin(reps_with_enough_orders)]
             sales_distribution = sales_distribution.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
         
             # Calculate percentage of sales for each rep for each game
