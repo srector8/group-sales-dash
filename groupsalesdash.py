@@ -194,7 +194,7 @@ else:
 
             full_date_range = pd.date_range(start=rep_time_series_sales['Date'].min(),
                                             end=rep_time_series_sales['Date'].max())
-            rep_time_series_sales.columns = ['Date', 'Total Orders']
+            rep_time_series_sales.columns = ['Date', 'Total Sales']
 
             rep_time_series_sales = rep_time_series_sales.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
             # Time-series line chart using Altair for sales rep total sales
@@ -230,7 +230,7 @@ else:
 
             rep_time_series_tickets = rep_time_series_tickets.set_index('Date').reindex(full_date_range).fillna(0).reset_index()
             
-            rep_time_series_tickets.columns = ['Date', 'Total Orders']
+            rep_time_series_tickets.columns = ['Date', 'Total Tickets Sold']
 
 
             # Time-series line chart using Altair for sales rep total tickets sold
