@@ -416,7 +416,7 @@ else:
             reps_to_exclude = ["Dan Tamburro", "Mitch Conrad", "Garet Griffin"]
         
             reps_with_enough_orders = [rep for rep in reps_with_enough_orders if rep not in reps_to_exclude]
-        
+
             # Prepare data for sales distribution by rep for each game
             sales_distribution = data[data['acct_rep_full_name'].isin(reps_with_enough_orders)]
             sales_distribution = sales_distribution.groupby(['event_name_display', 'acct_rep_full_name'])['block_full_price'].sum().reset_index()
